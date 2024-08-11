@@ -1,0 +1,58 @@
+services:
+  file:
+    container_name: file
+    env_file:
+      - .env
+    build:
+      context: .
+      dockerfile: Dockerfile-development
+    restart: unless-stopped
+    depends_on:
+      - file-postgres
+    environment:
+      SERVICE_NAME: file
+      DB_HOST: file-postgres
+      DB_NAME: file
+    ports:
+      - 5006:8080
+    networks:
+      - file-network
+      - file-postgres-network
+
+  file-postgres:
+    container_name: file-postgres
+    image: postgres:alpine3.19
+    restart: unless-stopped
+    volumes:
+      - file-postgres-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: $DB_USERNAME
+      POSTGRES_PASSWORD: $DB_PASSWORD
+      POSTGRES_DB: file
+    ports:
+      - 54326:5432
+    networks:
+      - file-postgres-network
+
+  adminer:
+    container_name: adminer-postgres
+    image: adminer:4.8.1
+    restart: unless-stopped
+    ports:
+      - 8081:8080
+    depends_on:
+      - file-postgres
+    networks:
+      - file-postgres-network
+
+networks:
+  file-postgres-network:
+    name: file-postgres-network
+    driver: bridge
+  file-network:
+    name: file-network
+    driver: bridge
+
+volumes:
+  file-postgres-data:
+    name: file-postgres-data
