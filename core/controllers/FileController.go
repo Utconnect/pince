@@ -8,6 +8,7 @@ import (
 	file_form "pince/core/http/requests/file-form"
 	"pince/core/models"
 	"pince/core/repositories"
+	"strconv"
 )
 
 type FileController struct {
@@ -50,17 +51,20 @@ func (controller *FileController) Create(context *gin.Context) {
 }
 
 func (controller *FileController) ReadData(context *gin.Context) {
-	fileName := context.Query("file_name")
-	file := models.File{}
-	err := controller.Repository.GetByName(&file, fileName)
+	id, _ := strconv.Atoi(context.Param("id"))
+
+	file := models.File{
+		ID: uint(id),
+	}
+	err := controller.Repository.GetById(&file)
 	if err != nil {
 		context.JSON(common.ErrorHandlerHttpResponse(err))
 		return
 	}
 
 	file.ActualFile, err = os.OpenFile(file.Location, os.O_RDONLY, 0644)
-	//_, err = io.CopyN(context.Writer, file.ActualFile, int64(file.Size))
 	if err != nil {
+		context.JSON(http.StatusInternalServerError, map[string]string{})
 		return
 	}
 
@@ -68,5 +72,6 @@ func (controller *FileController) ReadData(context *gin.Context) {
 		"Content-Disposition": `attachment; filename="` + file.Name + `"`,
 	}
 
+	//binary.Write(context.Writer, binary.LittleEndian, int64(file.Size))
 	context.DataFromReader(http.StatusOK, int64(file.Size), "application/octet-stream", file.ActualFile, extraHeaders)
 }

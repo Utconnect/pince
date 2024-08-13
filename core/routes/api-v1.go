@@ -25,6 +25,6 @@ func NewApiRoutes(router *gin.Engine) {
 		}
 
 		apiV1RouterGroup.POST("/files/upload", fileController.Create)
-		apiV1RouterGroup.GET("/files/data", fileController.ReadData)
+		apiV1RouterGroup.GET("/files/:id/data", fileController.ReadData)
 	}
 }

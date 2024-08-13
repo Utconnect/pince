@@ -21,7 +21,7 @@ func ConsoleLoggerMiddleware(context *gin.Context) {
 	}
 
 	log.Printf(color+"Request - Method: %s | Status: %d | Duration: %v | Start: %s | End: %s"+common.Reset, context.Request.Method, context.Writer.Status(), duration, start, end)
-	log.Println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+	log.Println("-------------------------------------------------------------")
 }
 
 func FileLoggerMiddleware(context *gin.Context) {

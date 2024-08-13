@@ -13,8 +13,8 @@ func (repository *FileRepository) Create(model _interface.IModel) error {
 	return repository.Connection.GormDb.Create(model).Error
 }
 
-func (repository *FileRepository) GetById(model *_interface.IModel, id any) error {
-	return repository.Connection.GormDb.Create(model).Error
+func (repository *FileRepository) GetById(model _interface.IModel) error {
+	return repository.Connection.GormDb.First(model, model.Id()).Error
 }
 
 func (repository *FileRepository) GetByIds(models []_interface.IModel, ids []any) error {
