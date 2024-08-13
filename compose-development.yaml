@@ -7,6 +7,8 @@ services:
       context: .
       dockerfile: Dockerfile-development
     restart: unless-stopped
+    volumes:
+      - file-data:/app/storage
     depends_on:
       - file-postgres
     environment:
@@ -56,3 +58,5 @@ networks:
 volumes:
   file-postgres-data:
     name: file-postgres-data
+  file--data:
+    name: file-data
