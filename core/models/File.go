@@ -33,3 +33,7 @@ func (f *File) ExtractMetaData(file multipart.FileHeader) {
 	f.Type = sliceFileName[len(sliceFileName)-1]
 	f.Size = int(file.Size)
 }
+
+func (f *File) Id() any {
+	return f.ID
+}
