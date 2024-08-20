@@ -1,4 +1,6 @@
-# UTC Teaching-supporting-system microservices (UTCTSS-MSs)
+# Pince
+
+A file management service
 
 ## Installation
 **Requirements:**
