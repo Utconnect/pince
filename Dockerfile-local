@@ -11,10 +11,4 @@ COPY . .
 
 RUN CGO_ENABLED=0 GOOS=linux go build -o ./build/migrationtool ./database/migrations/tool/.
 
-RUN #go test -v ./...
-
-#RUN addgroup -g 1000 appgroup
-#RUN adduser -D -u 1000 appuser -G appgroup
-
-#USER appuser
 CMD ["air", "-d"]

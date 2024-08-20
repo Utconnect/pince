@@ -1,0 +1,63 @@
+name: Dockerize and deploy app [dev]
+run-name: Dockerize and deploy app for development environment
+
+on:
+  push:
+    branches:
+      - development
+
+jobs:
+  Build-image:
+    runs-on: ubuntu-latest
+    environment: development
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push image
+        uses: docker/build-push-action@v6
+        with:
+          file: Dockerfile-development
+          push: true
+          tags: ${{ vars.DOCKERHUB_USERNAME }}/pince:dev-v1
+
+  Deploy-app:
+    needs:
+      - Build-image
+    runs-on: ubuntu-latest
+    environment: development
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      - name: Deploy app
+        run: |
+          set -x
+          eval $(ssh-agent -s)
+          ssh-add <(echo "${{ secrets.SSH_PRIVATE_KEY }}")
+          mkdir -p ~/.ssh
+          ssh-keyscan -H ${{ secrets.MY_VPS_IP_ADDRESS }} >> ~/.ssh/known_hosts
+          ssh ${{ secrets.MY_VPS_USER }}@${{ secrets.MY_VPS_IP_ADDRESS }} << 'EOF'
+            set -x
+            cd ${{ secrets.COMMON_SETUP_REPOSITORY_PATH }}
+            chmod +x ./create_network.sh
+            sudo ./create_network.sh
+
+            cd ${{ secrets.REPOSITORY_PATH }}
+            git checkout development
+            git pull
+
+            sudo DB_USERNAME=${{ secrets.APP_DB_USERNAME }} DB_PASSWORD=${{ secrets.APP_DB_PASSWORD }} docker compose -f compose-development.yaml up -d
+          EOF

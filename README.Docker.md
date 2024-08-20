@@ -2,6 +2,10 @@
 **Requirements:**
 - Docker version: 25.0.4
 
+Build app image:
+
+
+
 When you're ready, start your application by running:
 
 `docker compose -f compose-local.yaml up -d --build`
