@@ -3,7 +3,7 @@ services:
     container_name: file
     env_file:
       - .env
-    image: ${DOCKERHUB_USERNAME:-pthaiit210501}/pince:v1
+    image: ${DOCKERHUB_USERNAME:-pthaiit210501}/pince-dev:v1
     pull_policy: always
     restart: unless-stopped
     volumes:
