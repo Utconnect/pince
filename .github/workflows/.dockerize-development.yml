@@ -27,4 +27,4 @@ jobs:
         with:
           file: Dockerfile-development
           push: true
-          tags: ${{ vars.DOCKERHUB_USERNAME }}/pince-dev:v1
+          tags: ${{ vars.DOCKERHUB_USERNAME }}/pince:dev-v1
