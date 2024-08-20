@@ -3,9 +3,8 @@ services:
     container_name: file
     env_file:
       - .env
-    build:
-      context: .
-      dockerfile: Dockerfile-development
+    image: ${DOCKERHUB_USERNAME:-pthaiit210501}/pince:v1
+    pull_policy: always
     restart: unless-stopped
     volumes:
       - file-data:/app/storage
@@ -15,6 +14,8 @@ services:
       SERVICE_NAME: file
       DB_HOST: file-postgres
       DB_NAME: file
+      DB_USERNAME: ${DB_USERNAME:-user}
+      DB_PASSWORD: ${DB_PASSWORD:-password}
     ports:
       - 5006:8080
     networks:
@@ -22,14 +23,14 @@ services:
       - file-postgres-network
 
   file-postgres:
-    container_name: file-postgres
+    container_name: ${DB_HOST:-file-postgres}
     image: postgres:alpine3.19
     restart: unless-stopped
     volumes:
       - file-postgres-data:/var/lib/postgresql/data
     environment:
-      POSTGRES_USER: $DB_USERNAME
-      POSTGRES_PASSWORD: $DB_PASSWORD
+      POSTGRES_USER: ${DB_USERNAME:-user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-password}
       POSTGRES_DB: file
     ports:
       - 54326:5432
@@ -47,6 +48,7 @@ services:
     networks:
       - file-postgres-network
 
+
 networks:
   file-postgres-network:
     name: file-postgres-network
@@ -55,8 +57,9 @@ networks:
     name: file-network
     driver: bridge
 
+
 volumes:
   file-postgres-data:
     name: file-postgres-data
-  file--data:
+  file-data:
     name: file-data
