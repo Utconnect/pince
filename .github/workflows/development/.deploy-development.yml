@@ -1,13 +1,15 @@
 name: Dockerize app
 run-name: Deploy app for development environment
 on:
-  push:
-    branches:
-      - test_ci_cd
+  workflow_run:
+    workflows: ["Dockerize app [dev]"]
+    types:
+      - completed
 
 jobs:
   Build-image:
     runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     environment: development
     steps:
       - name: Check out repository code
