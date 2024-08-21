@@ -5,8 +5,10 @@ on:
   workflow_run:
     branches:
       - development
-    workflows: [Dockerize app, Dockerize app for development environment]
-    types: [completed]
+    workflows:
+      - Dockerize app
+    types:
+      - completed
 
 jobs:
   Deploy-app:
