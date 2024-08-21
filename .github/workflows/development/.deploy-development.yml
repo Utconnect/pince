@@ -1,5 +1,5 @@
 name: Dockerize app
-run-name: Dockerize app for development environment
+run-name: Deploy app for development environment
 on:
   push:
     branches:
@@ -10,10 +10,10 @@ jobs:
     runs-on: ubuntu-latest
     environment: development
     steps:
-      - name: Check out repository code process
+      - name: Check out repository code
         uses: actions/checkout@v4
 
-      - name: Deployment process
+      - name: Deploy
         run: |
           set -x
           eval $(ssh-agent -s)
