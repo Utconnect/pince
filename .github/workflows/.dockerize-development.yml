@@ -1,5 +1,6 @@
 name: Dockerize app
 run-name: Dockerize app for development environment
+
 on:
   push:
     branches:
