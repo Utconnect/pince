@@ -22,9 +22,9 @@ jobs:
           username: ${{ vars.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and push image
-        uses: docker/build-push-action@v6
-        with:
-          file: Dockerfile-development
-          push: true
-          tags: ${{ vars.DOCKERHUB_USERNAME }}/pince:dev-v1
+#      - name: Build and push image
+#        uses: docker/build-push-action@v6
+#        with:
+#          file: Dockerfile-development
+#          push: true
+#          tags: ${{ vars.DOCKERHUB_USERNAME }}/pince:dev-v1
