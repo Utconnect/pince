@@ -1,8 +1,8 @@
-name: Dockerize app
+name: Deploy app [dev]
 run-name: Deploy app for development environment
 on:
   workflow_run:
-    workflows: [Dockerize app]
+    workflows: ["Dockerize app [dev]"]
     types: [completed]
 
 jobs:

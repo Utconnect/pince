@@ -1,4 +1,4 @@
-name: Dockerize app
+name: Dockerize app [dev]
 run-name: Dockerize app for development environment
 on:
   push:
